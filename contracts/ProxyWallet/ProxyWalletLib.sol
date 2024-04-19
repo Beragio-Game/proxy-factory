@@ -1,4 +1,5 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.0 || ^0.8.19;
+
 
 import { Create2 } from "@openzeppelin/contracts/utils/Create2.sol";
 import { MemcpyLib } from "../libraries/MemcpyLib.sol";

@@ -1,5 +1,5 @@
 pragma experimental ABIEncoderV2;
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.0 || ^0.8.19;
 
 import { ProxyWalletLib } from "../ProxyWallet/ProxyWalletLib.sol";
 
