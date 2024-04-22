@@ -1,18 +1,19 @@
+pragma solidity ^0.5.0;
+pragma experimental ABIEncoderV2;
 
-pragma solidity ^0.5.0 || ^0.8.19;
 
 contract IGSNModule {
   function acceptRelayedCall(
     address /* relay */,
     address /* from */,
-    bytes calldata /* encodedFunction */,
+    bytes memory /* encodedFunction */,
     uint256 /* transactionFee */,
     uint256 /* gasPrice */,
     uint256 /* gasLimit */,
     uint256 /* nonce */,
-    bytes calldata /* approvalData */,
+    bytes memory /* approvalData */,
     uint256 /* maxPossibleCharge */
-  ) external returns (uint256 doCall, bytes memory);
-  function preRelayedCall(bytes calldata /* context */) external returns (bytes32) { }
-  function postRelayedCall(bytes calldata /* context */, bool /* success */, uint256 /* actualCharge */, bytes32 /* preRetVal */) external;
+  ) public  pure  returns (uint256 doCall, bytes memory);
+  function preRelayedCall(bytes memory /* context */) public  pure    returns (bytes32) { }
+  function postRelayedCall(bytes memory /* context */, bool /* success */, uint256 /* actualCharge */, bytes32 /* preRetVal */) public  pure  ;
 }

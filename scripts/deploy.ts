@@ -1,79 +1,18 @@
-// Imports
-// ========================================================
-import hre from "hardhat";
-import fs from "fs";  
-import { defineChain } from "viem";  
-import { privateKeyToAccount } from 'viem/accounts';  
+import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { DeployFunction } from "hardhat-deploy/types";
 
-// Config Needed For Custom Chain  
-// ========================================================  
-const chainConfiguration = defineChain({  
-  id: parseInt(`${process.env.CHAIN_ID}`), 
-  name: `${process.env.NETWORK_NAME}`, 
-  network: `${process.env.NETWORK_NAME}`, 
-  nativeCurrency: { 
-    decimals: parseInt(`${process.env.CURRENCY_DECIMALS}`), 
-    name: `${process.env.CURRENCY_NAME}`, 
-    symbol: `${process.env.CURRENCY_SYMBOL}`, 
-  }, 
-  rpcUrls: { 
-    default: { 
-      http: [`${process.env.RPC_URL}`], 
-    }, 
-    public: { 
-      http: [`${process.env.RPC_URL}`], 
-    }, 
-  }, 
-  blockExplorers: { 
-    default: { name: `${process.env.BLOCK_EXPLORER_NAME}`, url: `${process.env.BLOCK_EXPLORER_URL}` }, 
-  }, 
-}); 
+const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
+  console.log("Hello");
+    const { deployments, getNamedAccounts } = hre;
+    const { deploy } = deployments;
 
-// Main Deployment Script
-// ========================================================
-async function main() {
-  // NOTE: hardhat with viem currently doesn't support custom chains so there needs to be some custom functionality ↴ 
-  if (hre.network.name === 'berachainTestnet') { 
-    // Retrieve contract artifact ABI & Bytecode 
-    const contractName = "HelloWorld"; 
-    const artifactFile = fs.readFileSync(`${hre.artifacts._artifactsPath}/contracts/ProxyWallet/${contractName}.sol/${contractName}.json`); 
-    const artifactJSON = JSON.parse(artifactFile.toString()) as any; 
+    const { deployer } = await getNamedAccounts();
 
-    // Configure wallet client 
-    const walletClient = await hre.viem.getWalletClient( 
-      // wallet account 
-      privateKeyToAccount(hre.network.config.accounts?.[0] as `0x${string}`), 
-      // configured chain 
-      { 
-        chain: chainConfiguration 
-      } 
-    ); 
+    await deploy("ProxyWalletFactory", {
+        from: deployer,
+        args: [],
+        log: true,
+    });
+};
 
-    // Deploy contract 
-    const hash = await walletClient.deployContract({ 
-      abi: artifactJSON.abi, 
-      bytecode: artifactJSON.bytecode, 
-      args: ["Hello From Deployed Contract"] 
-    }); 
-    console.log({ hash }); 
-
-    // Retrieve deployed contract address 
-    const publicClient = await hre.viem.getPublicClient({ 
-      chain: chainConfiguration 
-    }); 
-    const receipt = await publicClient.waitForTransactionReceipt({ hash }); 
-    console.log(`${contractName} deployed to ${receipt?.contractAddress}`); 
-  } else { 
-    const contract = await hre.viem.deployContract("HelloWorld", ["Hello from the contract!"]);
-    console.log(`HelloWorld deployed to ${contract.address}`);
-  } 
-}
-
-// Init
-// ========================================================
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+export default func;

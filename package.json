@@ -13,6 +13,7 @@
     "@ethersproject/units": "^5.0.7",
     "@gnosis.pm/conditional-tokens-contracts": "^1.0.3",
     "@gnosis.pm/conditional-tokens-market-makers": "^1.8.1",
+    "@nomicfoundation/hardhat-foundry": "^1.0.1",
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
     "@openzeppelin/contracts": "2.5.0",
     "@openzeppelin/gsn-helpers": "^0.2.4",
@@ -42,7 +43,8 @@
     "solidity-coverage": "^0.7.11",
     "ts-node": "^8.10.2",
     "typechain": "^3.0.0",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "@typechain/hardhat": "^2.3.0"
   },
   "scripts": {
     "clean": "hardhat clean",
@@ -50,6 +52,11 @@
     "node": "./node_modules/.bin/hardhat node",
     "deploy:localhost": "./node_modules/.bin/hardhat run scripts/deploy.ts --network localhost",
     "deploy:berachain": "./node_modules/.bin/hardhat run scripts/deploy.ts --network berachainTestnet",
-    "compile": "./node_modules/.bin/hardhat compile"
+    "compile": "./node_modules/.bin/hardhat compile",
+    "typechain": "hardhat typechain"
+  },
+  "dependencies": {
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "hardhat-gas-reporter": "^2.1.1"
   }
 }
